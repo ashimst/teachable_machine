@@ -1,0 +1,13 @@
+# Ignore virtual environment directory
+venv/
+
+# Ignore uploaded images directory
+uploaded_images/
+
+# Other common ignores (optional)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.DS_Store

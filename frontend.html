@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management</title>
+</head>
+<body>
+    <h1>Project Management System</h1>
+
+    <h2>Create a New Project</h2>
+    <form id="create-project-form">
+        <label for="project_name">Project Name:</label>
+        <input type="text" id="project_name" name="project_name" required>
+        <button type="submit">Create Project</button>
+    </form>
+
+    <h2>Upload Images</h2>
+    <form id="upload-images-form" enctype="multipart/form-data">
+        <label for="upload_project_id">Project ID:</label>
+        <input type="text" id="upload_project_id" name="project_id" required>
+        <br>
+        <label for="label">Label:</label>
+        <input type="text" id="label" name="label" required>
+        <br>
+        <label for="files">Select Images:</label>
+        <input type="file" id="files" name="files" multiple required>
+        <br>
+        <button type="submit">Upload Images</button>
+    </form>
+
+    <h2>Train KNN Model</h2>
+    <form id="train-knn-form">
+        <label for="train_project_id">Project ID:</label>
+        <input type="text" id="train_project_id" name="project_id" required>
+        <br>
+        <button type="submit">Train Model</button>
+    </form>
+
+    <h2>Classify Image</h2>
+    <form id="classify-image-form" enctype="multipart/form-data">
+        <label for="classify_project_id">Project ID:</label>
+        <input type="text" id="classify_project_id" name="project_id" required>
+        <br>
+        <label for="classify_file">Select Image:</label>
+        <input type="file" id="classify_file" name="file" required>
+        <br>
+        <button type="submit">Classify Image</button>
+    </form>
+
+    <script>
+        document.getElementById('create-project-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const projectName = document.getElementById('project_name').value;
+            const response = await fetch('/projects/create-project', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ project_name: projectName })
+            });
+            const result = await response.json();
+            alert(result.message || result.detail);
+        });
+
+        document.getElementById('upload-images-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/projects/class', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            alert(result.message || result.detail);
+        });
+
+        document.getElementById('train-knn-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const projectId = document.getElementById('train_project_id').value;
+            const response = await fetch('/projects/train', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ project_id: projectId })
+            });
+            const result = await response.json();
+            alert(result.message || result.detail);
+        });
+
+        document.getElementById('classify-image-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/projects/classify', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            alert(`Predicted label: ${result.predicted_label}`);
+        });
+    </script>
+</body>
+</html>
